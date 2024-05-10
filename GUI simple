@@ -1,0 +1,48 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Thu May  9 12:23:39 2024
+@author: JoseArgote
+"""
+import tkinter as tk
+from pymodbus.client import ModbusTcpClient as ModbusClient                                                 
+from tkinter import ttk
+main1=tk.Tk()
+main1.title("EXAMEN")
+main1.geometry('800x500')
+client=ModbusClient('127.0.0.1', port=502)
+client.connect()
+bitsig=0x1
+#FUNCIONES
+
+def write1():
+    client.write_coil(1, True, bitsig)    
+    main1.after(500,pulso1)
+def pulso1():
+    client.write_coil(1, False, bitsig)        
+
+def write2():
+    client.write_coil(2, True, bitsig)    
+    main1.after(500,pulso2)
+def pulso2():
+    client.write_coil(2, False, bitsig)    
+#BOTONES
+botn1=ttk.Button(text="ON",command=write1)
+botn1.place(x=50, y=50)
+
+botn2=ttk.Button(text="OFF",command=write2)
+botn2.place(x=150, y=50)
+
+
+
+lecturaM3=client.read_coils(3, 1)
+lecturaM3.bits[0]
+
+
+
+client.write_coil(1, True)
+client.write_coil(2, True)
+
+
+
+
+main1.mainloop()
